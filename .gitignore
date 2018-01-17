@@ -1,0 +1,38 @@
+## Ignore Visual Studio temporary files, build results, and
+##
+## See https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
+## (only using subset of above)
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+##Custom stuff 
+
+#Don't add external packages or scripts
+packages/
+Scripts/
+fonts/
+
+#don't add publish info
+PublishProfiles/
+
+#no bootstrap files
+bootstrap*

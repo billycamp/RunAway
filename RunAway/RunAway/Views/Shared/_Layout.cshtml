@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>Run Away!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        canvas {
+            display: block;
+            border:solid;
+            border-width: 5px;
+            border-color:mediumvioletred;
+        }
+
+        #back {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background: #ccc;
+            width: 150px;
+            height: 25px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            text-align: center;
+            padding-top: 5px;
+            opacity: 0.5;
+        }
+
+            #back:hover {
+                opacity: 1;
+            }
+
+        #twitter {
+            position: absolute;
+            top: 10px;
+            left: 180px;
+            background: #ccc;
+            width: 150px;
+            height: 25px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            text-align: center;
+            padding-top: 5px;
+            opacity: 0.5;
+        }
+
+            #twitter:hover {
+                opacity: 1;
+            }
+
+        a {
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            color: #000;
+        }
+
+        html, body {
+            background-color:lightpink;
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            overflow-y: hidden;
+        }
+
+        html * {
+            font-size: 1em !important;
+            color:darkred !important;
+            font-family: Arial !important;
+        }
+
+    </style>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/gameScripts/animate.js"></script>
+    <script src="~/gameScripts/gameObjects.js"></script>
+    @RenderSection("scripts", required: false)
+</head>
+<body onload="ns_gns.init()">
+    @RenderBody()
+</body>
+</html>
