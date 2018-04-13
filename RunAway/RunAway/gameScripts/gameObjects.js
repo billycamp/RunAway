@@ -15,6 +15,9 @@ ns_gns.monstersStillMoving = false;
 ns_gns.monsterMoveInterval = 50; //let each monster decide direction or not every .05 seconds
 ns_gns.addMonsterInterval = 5000; //add a monster every 5 seconds
 ns_gns.MonsterTypes = { sleepy: 0, stupid: 1, smart: 2, evil: 3 };
+ns_gns.scoreBoardIntervalHandle;  //holder for scoreboard update interval handle
+ns_gns.scoreBoardIntervalMS = 200;
+
 
 ns_gns.rect = function (x,y,h,w)
 {
@@ -125,11 +128,12 @@ ns_gns.moveEachMonster = function (monster, index) {
     // 6 7 8
     var direction = 0;
     var player = ns_gns.movingObjects[0];
-    //skip player 0, don't move if dead       
+    //skip player 0, don't move if dead      
+   
     if (index > 0 && (!ns_gns.isDead)) {
         var newMonsterMoveRoll = Math.random();
         var distance = ns_gns.getDistanceBetweenMovingObjects(monster, player);
-        //refactor: Replace switch with properties on monster object - percentMoveRnd, percentMoveToPlayer, percentStop 
+        //refactor: Replace magic numbers with constants
         switch (monster.MonsterType) {
             case ns_gns.MonsterTypes.sleepy:
                 //5% chance of sleepy monster change direction, direction random
@@ -215,10 +219,10 @@ ns_gns.setHighScore = function (score) {
     var swap = 0;
     scoreArray.unshift(score);
 
-    for (var f = 1; f < scoreArray.length; f++) {
-        if (parseInt(scoreArray[f - 1]) < parseInt(scoreArray[f])) {
-            swap = scoreArray[f - 1];
-            scoreArray[f - 1] = scoreArray[f];
+    for (var f = 0; f < scoreArray.length-1; f++) {
+        if (parseInt(scoreArray[f + 1]) > parseInt(scoreArray[f]) ) {
+            swap = scoreArray[f+1];
+            scoreArray[f + 1] = scoreArray[f];
             scoreArray[f] = swap;
         }
     }
@@ -226,7 +230,7 @@ ns_gns.setHighScore = function (score) {
 
     document.cookie = "High Score=" + ns_gns.formatScoreArray(scoreArray, ",") + ";expires=Tue, 19 Jan 2038 03:14:07 UTC;";
 
-    return (score > scoreArray[0]);
+    return (parseInt(score) >= parseInt(scoreArray[0]));
 }
 ns_gns.formatScoreArray = function (scoreArray, delimiter) {
     var scoreListStr = "";
@@ -258,7 +262,8 @@ ns_gns.scoreBoard = function () {
     ns_gns.showScoreHtml(score);
     
     if (ns_gns.isDead) {
-
+        //Don't call again
+        window.clearInterval(ns_gns.scoreBoardIntervalHandle);
         //check list and add score if appropriate
         var newHS = ns_gns.setHighScore(score);
         //todo replace with dialog
@@ -272,6 +277,9 @@ ns_gns.scoreBoard = function () {
         }
 
         ns_gns.showBanner(finishStr);
+
+        //ns_gns.gameStateControl();
+        location.reload();
 
     }
     else {
@@ -450,15 +458,13 @@ ns_gns.init = function () {
     ns_gns.gameStateControl();
 }
 ns_gns.showBanner = function (htmlStr) {
-    // update UI with final score
-    ns_gns.showScoreHtml(ns_gns.movingObjects[0].score);
-    //var x = window.innerWidth;
+    // replace with Div showing game to avoid page reload
     alert(htmlStr);
-    ns_gns.gameStateControl();
+
 }
 ns_gns.gameStart = function () {
     //give points and display death (if applicable) every 1/5 of a second
-    setInterval(ns_gns.scoreBoard, 200);
+    ns_gns.scoreBoardIntervalHandle = setInterval(ns_gns.scoreBoard, ns_gns.scoreBoardIntervalMS);
 
     //Monster management
     setInterval(ns_gns.moveMonsters, ns_gns.monsterMoveInterval);
