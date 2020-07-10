@@ -88,6 +88,7 @@ ns_gns.addMonster = function (newMonsterType) {
     }
 
     // todo smarter monster type picker
+    // todo abstract magic numbers
     // 30% of monsters are sleepy, 30% dumb, 20% smart, 10% evil
     if (newMonsterType === undefined) {
         var newMonsterRoll = Math.random();
@@ -401,14 +402,21 @@ ns_gns.isCollide = function (rect1, rect2) {
 }
 ns_gns.moveAnything = function (index) {
     var thing = ns_gns.movingObjects[index];
+    //Speed
     if (thing.goRight) ns_gns.movingObjects[index].rect.x += thing.velocity;
     if (thing.goLeft) ns_gns.movingObjects[index].rect.x -= thing.velocity;
     if (thing.goUp) ns_gns.movingObjects[index].rect.y -= thing.velocity;
     if (thing.goDown) ns_gns.movingObjects[index].rect.y += thing.velocity;
-    if (thing.rect.x <= 0) ns_gns.movingObjects[index].rect.x = 0;
-    if ((thing.rect.x + thing.rect.w) >= ns_gns.mapWidth) ns_gns.movingObjects[index].rect.x = ns_gns.mapWidth - thing.rect.w;
-    if (thing.rect.y <= 0) ns_gns.movingObjects[index].rect.y = 0;
-    if ((thing.rect.y + ns_gns.movingObjects[index].rect.h) >= ns_gns.mapHeight) ns_gns.movingObjects[index].rect.y = ns_gns.mapHeight - thing.rect.h;
+    //wall
+    //if (thing.rect.x <= 0) ns_gns.movingObjects[index].rect.x = 0;
+    //if ((thing.rect.x + thing.rect.w) >= ns_gns.mapWidth) ns_gns.movingObjects[index].rect.x = ns_gns.mapWidth - thing.rect.w;
+    //if (thing.rect.y <= 0) ns_gns.movingObjects[index].rect.y = 0;
+    //if ((thing.rect.y + ns_gns.movingObjects[index].rect.h) >= ns_gns.mapHeight) ns_gns.movingObjects[index].rect.y = ns_gns.mapHeight - thing.rect.h;
+    if (thing.rect.x < 0) ns_gns.movingObjects[index].rect.x = ns_gns.mapWidth - thing.rect.w;
+    if ((thing.rect.x + thing.rect.w) > ns_gns.mapWidth) ns_gns.movingObjects[index].rect.x = 0;
+    if (thing.rect.y < 0) ns_gns.movingObjects[index].rect.y = ns_gns.mapHeight - thing.rect.h;
+    if ((thing.rect.y + ns_gns.movingObjects[index].rect.h) > ns_gns.mapHeight) ns_gns.movingObjects[index].rect.y = 0;
+
 }
 //Player control 
 ns_gns.processKbd = function () {
@@ -431,11 +439,11 @@ ns_gns.onKeyUp = function (evt) {
 }
 //setup
 ns_gns.init = function () {
-    //$('#losCanvas')[0].
+    //todo - move magic #s to constants
     var winWidth = window.innerWidth;
     var winHeight = window.innerHeight;
-    $('#losCanvas')[0].width = winWidth - (Math.round(winWidth / 12) );
-    $('#losCanvas')[0].height = winHeight - (100+(Math.round(winHeight / 12) * 2));
+    $('#losCanvas')[0].width = winWidth - (Math.round(winWidth / 4) );
+    $('#losCanvas')[0].height = winHeight -(Math.round(winHeight / 8) );
     ns_gns.context = $('#losCanvas')[0].getContext('2d');
     ns_gns.mapWidth = $('#losCanvas').width();
     ns_gns.mapHeight = $('#losCanvas').height();
@@ -458,7 +466,7 @@ ns_gns.init = function () {
     ns_gns.gameStateControl();
 }
 ns_gns.showBanner = function (htmlStr) {
-    // replace with Div showing game to avoid page reload
+    //TODO replace with Div showing game to avoid page reload
     alert(htmlStr);
 
 }

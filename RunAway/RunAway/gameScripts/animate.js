@@ -7,8 +7,6 @@
 
  */
 
-
-
 if (!window.requestAnimationFrame) {
 
 
@@ -27,11 +25,7 @@ if (!window.requestAnimationFrame) {
 
 		function ( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
 
-
-
 		    window.setTimeout(callback, 1000 / 60);
-
-
 
 		};
 
